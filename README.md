@@ -1,2 +1,2 @@
 # Blockchain_Test
-Testing simple blockchain algorithm
+Testing simple blockchain algorithm and small criptocurrency 
