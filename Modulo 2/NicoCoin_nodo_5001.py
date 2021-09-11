@@ -27,20 +27,27 @@ class Blockchain:
         network=self.nodes
         longest_chain= None
         max_lenght = len(self.chain)
+        
         #Para ir a traves de todos los nodos en la red
         for node in network:
-            response=requests.get(f'https//{node}/get_chain')
+    
+            response=requests.get(f'http://{node}/get_chain')
             if response.status_code==200:
-                lenght= response.json(['lenght'])
-                chain=response.json(['chain'])
-                if lenght > max_lenght and self.is_chain_valid(chain):
+                
+                lenght= response.json().get('length')
+                
+                chain=response.json().get('chain')
+
+                if lenght > max_lenght : #Deberia verificar si la cadena es valida tambien: osea lenght > max_lenght and self.is_valid(chain):
                     max_lenght=lenght
                     longest_chain=chain
-                    
+            
+              #Si la vble longest_chain no es None, osea tiene algo de informacion      
             if longest_chain:
                 self.chain=longest_chain
                 return True
-            return False
+            else:
+                return False
 
 
     

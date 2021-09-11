@@ -154,9 +154,7 @@ def is_valid():
         response = {'message' : 'Error, el Blockchain NO es valido' }
     return jsonify(response), 200
 
-#Corriendo app
-if __name__ == '__main__':
-    app.run( host='0.0.0.0', port='5000', debug=True, use_reloader=False) 
+
     
 #Agregar nueva transaccion
 @app.route('/add_transaction', methods=['POST'])
@@ -203,3 +201,6 @@ def replace_chain():
     return jsonify(response), 200   
     
     
+#Corriendo app
+if __name__ == '__main__':
+    app.run( host='0.0.0.0', port='5000') 

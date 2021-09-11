@@ -27,20 +27,27 @@ class Blockchain:
         network=self.nodes
         longest_chain= None
         max_lenght = len(self.chain)
+        
         #Para ir a traves de todos los nodos en la red
         for node in network:
-            response=requests.get(f'https//{node}/get_chain')
+    
+            response=requests.get(f'http://{node}/get_chain')
             if response.status_code==200:
-                lenght= response.json(['lenght'])
-                chain=response.json(['chain'])
-                if lenght > max_lenght or self.is_chain_valid(chain): #Deberia ser AND
+                
+                lenght= response.json().get('length')
+                
+                chain=response.json().get('chain')
+
+                if lenght > max_lenght : #Deberia verificar si la cadena es valida tambien: osea lenght > max_lenght and self.is_valid(chain):
                     max_lenght=lenght
                     longest_chain=chain
-                    
+            
+              #Si la vble longest_chain no es None, osea tiene algo de informacion      
             if longest_chain:
                 self.chain=longest_chain
                 return True
-            return False
+            else:
+                return False
 
 
     
@@ -146,7 +153,7 @@ def get_chain():
 #Evaluando la validez de la cadena de bloques
 @app.route('/is_valid', methods=['GET'])
 
-def is_valid():             #Revisar... (altera tmb el replace chain)
+def is_valid():             #Revisar... 
     is_valid = blockchain.is_chain_valid(blockchain.chain)
     if is_valid:
         response = {'message' : 'Todo bien, el Blockchain es valido' }
@@ -189,6 +196,7 @@ def  connect_node():
 
 def replace_chain():
     is_chain_replaced = blockchain.replace_chain()
+   
     if is_chain_replaced :
         response = {'message' : 'Los nodos tenian diferentes cadenas... la cadena fue reemplazada por la mas larga',
                     'new_chain': blockchain.chain
